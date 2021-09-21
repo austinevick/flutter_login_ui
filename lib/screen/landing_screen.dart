@@ -1,9 +1,13 @@
+import 'package:entry/entry.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_login_ui/screen/login_screen.dart';
 import 'package:flutter_login_ui/screen/signup_screen.dart';
+import 'package:flutter_login_ui/widget/circle_top_border_clipper.dart';
+import 'package:flutter_login_ui/widget/custom_button.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -12,8 +16,24 @@ class LandingScreen extends StatefulWidget {
   _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> {
-  int selectedIndex = 0;
+class _LandingScreenState extends State<LandingScreen>
+    with SingleTickerProviderStateMixin {
+  late final animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 800),
+  );
+  @override
+  void initState() {
+    animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,7 +65,7 @@ class _LandingScreenState extends State<LandingScreen> {
           bottom: 200,
           height: 300,
           child: ClipPath(
-            clipper: OvallTopBorderClipper(),
+            clipper: CircleTopBorderClipper(),
             child: Container(
               height: 150,
               color: const Color(0xffe8e9ec),
@@ -59,7 +79,7 @@ class _LandingScreenState extends State<LandingScreen> {
           bottom: 100,
           height: 300,
           child: ClipPath(
-            clipper: OvallTopBorderClipper(),
+            clipper: CircleTopBorderClipper(),
             child: Container(
               color: const Color(0xffdfe0e4),
               height: 150,
@@ -73,7 +93,7 @@ class _LandingScreenState extends State<LandingScreen> {
           bottom: 0,
           height: 300,
           child: ClipPath(
-            clipper: OvallTopBorderClipper(),
+            clipper: CircleTopBorderClipper(),
             child: Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -98,55 +118,5 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
       ],
     )));
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final String? text;
-  const CustomButton({
-    Key? key,
-    this.onPressed,
-    this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 250,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100), color: Colors.white),
-        height: 50,
-        child: MaterialButton(
-          onPressed: onPressed,
-          shape: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
-          child: Text(
-            text!,
-            style: const TextStyle(color: Colors.blue, fontSize: 18),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class OvallTopBorderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, 0);
-    path.lineTo(0, 70);
-    path.quadraticBezierTo(size.width / 4, 0, size.width / 2, 0);
-    path.quadraticBezierTo(size.width - size.width / 4, 0, size.width, 70);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return true;
   }
 }

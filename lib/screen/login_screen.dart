@@ -1,6 +1,10 @@
+import 'package:entry/entry.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_login_ui/widget/circle_container_items.dart';
+import 'package:flutter_login_ui/widget/circle_top_border_clipper.dart';
+import 'package:flutter_login_ui/widget/custom_button.dart';
 
 import 'landing_screen.dart';
 
@@ -14,7 +18,24 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
+  late final animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 000),
+  );
+  @override
+  void initState() {
+    animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -22,14 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Stack(
           children: [
             const Positioned(
-                left: -70,
-                top: -100,
-                child: CircleAvatar(
-                  radius: 110,
-                )),
+              left: -70,
+              top: -100,
+              child: Entry.scale(
+                  duration: Duration(milliseconds: 200),
+                  delay: Duration(milliseconds: 300),
+                  child: CircleAvatar(radius: 110)),
+            ),
             const Positioned(
                 left: 10,
-                child: OvalContainerItems(
+                child: CircleContainerItems(
                   text: 'Login',
                 )),
             Positioned(
@@ -38,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
               bottom: 180,
               height: 300,
               child: ClipPath(
-                clipper: OvallTopBorderClipper(),
+                clipper: CircleTopBorderClipper(),
                 child: Container(
                   height: 150,
                   color: const Color(0xffe8e9ec),
@@ -52,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               bottom: 100,
               height: 330,
               child: ClipPath(
-                clipper: OvallTopBorderClipper(),
+                clipper: CircleTopBorderClipper(),
                 child: Container(
                   color: const Color(0xffdfe0e4),
                   height: 150,
@@ -66,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               bottom: 0,
               height: 380,
               child: ClipPath(
-                clipper: OvallTopBorderClipper(),
+                clipper: CircleTopBorderClipper(),
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   child: Column(
@@ -105,52 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class OvalContainerItems extends StatelessWidget {
-  final String? text;
-  const OvalContainerItems({
-    Key? key,
-    this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Row(
-              children: const [
-                Icon(Icons.keyboard_backspace, color: Colors.white),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Back',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 18,
-          ),
-          Text(
-            text!,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-          )
-        ],
       ),
     );
   }
